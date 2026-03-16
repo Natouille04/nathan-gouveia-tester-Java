@@ -14,15 +14,20 @@ public class DataBaseTestConfig extends DataBaseConfig {
         logger.info("Create DB connection");
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/test","root","rootroot");
+                "jdbc:mysql://mysql-natouille.alwaysdata.net:3306/natouille_javatest?useSSL=false&allowPublicKeyRetrieval=true",
+                "natouille",
+                "#Nat04072008"
+        );
     }
 
     public void closeConnection(Connection con){
-        if(con!=null){
+        if(con != null){
             try {
                 con.close();
                 logger.info("Closing DB connection");
-            } catch (SQLException e) {
+            }
+
+            catch (SQLException e) {
                 logger.error("Error while closing connection",e);
             }
         }

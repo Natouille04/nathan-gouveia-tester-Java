@@ -1,6 +1,4 @@
 /* Setting up PROD DB */
-create database prod;
-use prod;
 
 create table parking(
 PARKING_NUMBER int PRIMARY KEY,
