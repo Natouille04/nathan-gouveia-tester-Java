@@ -31,8 +31,6 @@ public class ParkingService {
         try {
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
 
-            System.out.println("parking spot : " + parkingSpot);
-
             if(parkingSpot != null && parkingSpot.getId() > 0) {
 
                 String vehicleRegNumber = getVehichleRegNumber();
@@ -76,7 +74,7 @@ public class ParkingService {
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
 
-    public ParkingSpot getNextParkingNumberIfAvailable(){
+    public ParkingSpot getNextParkingNumberIfAvailable() {
         int parkingNumber = 0;
         ParkingSpot parkingSpot = null;
 
@@ -88,7 +86,7 @@ public class ParkingService {
                 parkingSpot = new ParkingSpot(parkingNumber, parkingType, true);
             }
 
-            else{
+            else {
                 throw new Exception("Error fetching parking number from DB. Parking slots might be full");
             }
 
@@ -142,10 +140,9 @@ public class ParkingService {
 
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
+
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
-                System.out.println("Please pay the parking fare:" + ticket.getPrice());
-                System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
             }
 
             else{

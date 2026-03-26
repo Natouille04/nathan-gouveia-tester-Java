@@ -14,10 +14,7 @@ public class DataBaseTestConfig extends DataBaseConfig {
         logger.info("Create DB connection");
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(
-                "jdbc:mysql://mysql-natouille.alwaysdata.net:3306/natouille_javatest?useSSL=false&allowPublicKeyRetrieval=true",
-                "natouille",
-                "#Nat04072008"
-        );
+                "jdbc:mysql://localhost:3306/test?serverTimezone=Europe/Paris","root","rootroot");
     }
 
     public void closeConnection(Connection con){

@@ -53,9 +53,10 @@ public class TicketDAO {
             //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
             ps.setString(1,vehicleRegNumber);
             ResultSet rs = ps.executeQuery();
+
             if(rs.next()){
                 ticket = new Ticket();
-                ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(1), ParkingType.valueOf(rs.getString(6)),false);
+                ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(1), ParkingType.valueOf(rs.getString(6)), rs.getBoolean(7));
                 ticket.setParkingSpot(parkingSpot);
                 ticket.setId(rs.getInt(2));
                 ticket.setVehicleRegNumber(vehicleRegNumber);
@@ -63,11 +64,16 @@ public class TicketDAO {
                 ticket.setInTime(rs.getTimestamp(4));
                 ticket.setOutTime(rs.getTimestamp(5));
             }
+
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
-        }catch (Exception ex){
+        }
+
+        catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
-        }finally {
+        }
+
+        finally {
             dataBaseConfig.closeConnection(con);
             return ticket;
         }
@@ -75,6 +81,7 @@ public class TicketDAO {
 
     public boolean updateTicket(Ticket ticket) {
         Connection con = null;
+
         try {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_TICKET);
@@ -92,6 +99,7 @@ public class TicketDAO {
         finally {
             dataBaseConfig.closeConnection(con);
         }
+
         return false;
     }
 
@@ -118,7 +126,6 @@ public class TicketDAO {
         catch (Exception ex) {
             logger.error("Error counting tickets for vehicle", ex);
         }
-
 
         finally {
             dataBaseConfig.closeConnection(con);
