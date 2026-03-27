@@ -37,6 +37,9 @@ public class ParkingServiceTest {
 
     @Test
     public void processIncomingVehicleTest() throws Exception {
+        // TEST 1 - Test du l'entrée d'un véhicule
+
+        // Définition des réponses pour le test
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
@@ -44,7 +47,16 @@ public class ParkingServiceTest {
         when(ticketDAO.saveTicket(any(Ticket.class))).thenReturn(true);
         when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
 
+        // Simulation de l'entrée d'un véhicule
         parkingService.processIncomingVehicle();
+
+        /*
+            Vérification :
+
+            - De la mise a jour de la place de parking
+            - de l'enregistrement du ticket en BDD
+
+         */
 
         verify(parkingSpotDAO, times(1)).updateParking(any(ParkingSpot.class));
         verify(ticketDAO, times(1)).saveTicket(any(Ticket.class));
@@ -52,18 +64,31 @@ public class ParkingServiceTest {
 
     @Test
     public void processExitingVehicleTest() throws Exception {
+        // TEST 2 - Test de la sortie d'un véhicule
+
+        // Création d'un ticket
         Ticket ticket = new Ticket();
         ticket.setInTime(new Date(System.currentTimeMillis() - (12 * 60 * 60 * 1000)));
         ticket.setParkingSpot(new ParkingSpot(1, ParkingType.CAR, false));
         ticket.setVehicleRegNumber("ABCDEF");
 
+        // Définition des réponses pour le test
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
         when(ticketDAO.getNbTicket(anyString())).thenReturn(1);
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
         when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
 
+        // Simulation de la sortie d'un véhicule
         parkingService.processExitingVehicle();
+
+        /*
+            Vérification :
+
+            - De l'existence du ticket
+            - De la mise a jour de la place de parking
+
+         */
 
         verify(ticketDAO, times(1)).getNbTicket("ABCDEF");
         verify(parkingSpotDAO, times(1)).updateParking(any(ParkingSpot.class));
@@ -71,6 +96,8 @@ public class ParkingServiceTest {
 
     @Test
     public void testGetNextParkingNumberIfAvailable() {
+        // TEST 3 - Test de la sortie d'un véhicule
+
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1);
 
